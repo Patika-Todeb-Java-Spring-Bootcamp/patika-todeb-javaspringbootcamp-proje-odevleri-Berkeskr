@@ -11,11 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+// TODO : rename wıth user
 public class AdminController {
     @Autowired
     private AdminService adminService;
 
     @GetMapping("/all")
+    // TODO: remove all
     public ResponseEntity getAllAdmin(){
         List<Admin> allAdmin = adminService.getAllAdmin();
         return ResponseEntity.ok(allAdmin);
@@ -33,6 +35,7 @@ public class AdminController {
     }
 
     @PostMapping("/create")
+    // TODO : create demene gerke yok post zaten create demek
     public ResponseEntity createAdmin(@RequestBody Admin admin){
         Admin createdAdmin = adminService.createAdmin(admin);
         if(createdAdmin==null){
@@ -42,7 +45,8 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
     }
     //localhost:8080/admin?id=variable is syntax
-    @DeleteMapping
+    @DeleteMapping("")
+    // TODO: ıd path varıable olarak alınmalı
     public ResponseEntity deleteAdmin(@RequestParam(name = "id")Long id){
         try {
             adminService.deleteAdmin(id);
@@ -54,7 +58,9 @@ public class AdminController {
     }
 
     @PutMapping("/update/{id}")
+    // TODO : update kaldırılmalı put mappıng zaten update demek
     public ResponseEntity updateAdmin(@PathVariable Long id,@RequestBody Admin admin){
+        System.out.println("admın:{} create request",admin);
         Admin updatedAdmin = adminService.updateAdmin(id, admin);
         if(updatedAdmin==null){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,6 +69,10 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
     }
 
+    // TODO : buradakı desıgn patternsslere bakarak book controller yarat
+    // TODO : projeyı memory db'de çalışcak hale getır
+    // TODO : log4j ımplanatasyounu ve admın controller ıçın loglama ışlemerınn yapılması
+    // TODO log4j log leveller nedır hangı durumda hangı log basılmalıdır.
 
 
 

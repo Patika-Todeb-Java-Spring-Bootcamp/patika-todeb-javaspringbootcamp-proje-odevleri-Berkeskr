@@ -23,33 +23,19 @@ public class AdminController {
     }
     @GetMapping("/admin/{id}")
     public ResponseEntity getAdminById(@PathVariable Long id) {
-        Admin adminById;
-        try {
-            adminById = adminService.getAdminById(id);
-        } catch (RuntimeException exception) {
-            return ResponseEntity.notFound().build();
-        }
+        Admin adminById = adminService.getAdminById(id);
         return ResponseEntity.status(HttpStatus.OK).body(adminById);
     }
 
     @PostMapping("/admin")
     public ResponseEntity createAdmin(@RequestBody Admin admin){
         Admin createdAdmin = adminService.createAdmin(admin);
-        if(createdAdmin==null){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Creation failed");
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmin);
     }
 
     @DeleteMapping("/admin/{id}")
     public ResponseEntity deleteAdmin(@PathVariable Long id){
-        try {
-            adminService.deleteAdmin(id);
-
-        }catch (RuntimeException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-        }
+        adminService.deleteAdmin(id);
         return ResponseEntity.status(HttpStatus.OK).body("Admin deleted");
     }
 
@@ -57,10 +43,6 @@ public class AdminController {
     public ResponseEntity updateAdmin(@PathVariable Long id,@RequestBody Admin admin){
         //System.out.println("admın:{} create request",admin);
         Admin updatedAdmin = adminService.updateAdmin(id, admin);
-        if(updatedAdmin==null){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Update failed");
-        }
         return ResponseEntity.status(HttpStatus.OK).body(updatedAdmin);
     }
 

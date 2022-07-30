@@ -2,10 +2,8 @@ package com.example.libraryautomationsystem.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 @Data
 @Entity
 public class Book {
@@ -16,6 +14,7 @@ public class Book {
 
     private String bookName;
     private String author;
-
-
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 }

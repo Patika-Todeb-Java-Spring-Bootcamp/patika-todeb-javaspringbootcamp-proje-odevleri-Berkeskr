@@ -1,11 +1,11 @@
 package com.example.libraryautomationsystem.service;
 
-import antlr.StringUtils;
+import com.example.libraryautomationsystem.exception.AdminAlreadyExist;
+import com.example.libraryautomationsystem.exception.AdminNotFound;
 import com.example.libraryautomationsystem.model.Admin;
 import com.example.libraryautomationsystem.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -23,13 +23,17 @@ public class AdminService {
 
     public Admin getAdminById(Long id){
         Optional<Admin> byId = adminRepository.findById(id);
-        return byId.orElseThrow(()->new RuntimeException("Admin not found"));
+        return byId.orElseThrow(()->new AdminNotFound("Admin with id:"+id+" not found"));
 
     }
 
     public Admin createAdmin(Admin admin){
-        return adminRepository.save(admin);
 
+        Admin existingAdmin = adminRepository.findById(admin.getId()).orElse(null);
+        if (existingAdmin==null){
+            return adminRepository.save(admin);
+        }
+        else throw new AdminAlreadyExist("Admin already exist!");
     }
 
     public void deleteAdmin(Long id){
@@ -38,15 +42,12 @@ public class AdminService {
     }
 
     public Admin updateAdmin(Long id,Admin admin){
-        Optional<Admin> byId = adminRepository.findById(id);
-        if(!byId.isPresent()){
-            return null;
-        }
-        Admin updatedAdmin = byId.get();
-        updatedAdmin.setName(admin.getName());
-        updatedAdmin.setSurname(admin.getSurname());
-        updatedAdmin.setEmail(admin.getEmail());
-        return adminRepository.save(updatedAdmin);
+        Admin existingAdmin = getAdminById(id);
+
+        existingAdmin.setName(admin.getName());
+        existingAdmin.setSurname(admin.getSurname());
+        existingAdmin.setEmail(admin.getEmail());
+        return adminRepository.save(existingAdmin);
 
     }
 }
